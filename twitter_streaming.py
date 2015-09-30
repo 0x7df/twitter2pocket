@@ -1,3 +1,9 @@
+# Pipe the output of this to file, e.g.:
+#
+#     `python twitter_streaming.py > twitter_data.txt`
+#
+# The output is in JSON format.
+
 # This uses Tweepy, a Python library for accessing the Twitter API:
 # http://www.tweepy.org. Install with `pip install tweepy`.
 
