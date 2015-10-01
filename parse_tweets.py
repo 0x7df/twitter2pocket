@@ -32,12 +32,13 @@ def getData(tweet, key):
        return ''
     return txt
 
-tweets['text'] = map(lambda tweet: getData(tweet, 'text') if getData(tweet, \
-    'text') != None else '', tweets_data)
-tweets['lang'] = map(lambda tweet: getData(tweet, 'lang') if getData(tweet,
-    'lang') != None else '', tweets_data)
-tweets['country'] = map(lambda tweet: getData(tweet, 'place')['country'] if getData(tweet,
-    'place') != None else None, tweets_data)
+tweets['text'] = map(lambda tweet: tweet['text'], tweets_data)
+#tweets['text'] = map(lambda tweet: getData(tweet, 'text') if getData(tweet, \
+#    'text') != None else '', tweets_data)
+#tweets['lang'] = map(lambda tweet: getData(tweet, 'lang') if getData(tweet,
+#    'lang') != None else '', tweets_data)
+#tweets['country'] = map(lambda tweet: getData(tweet, 'place')['country'] if getData(tweet,
+#    'place') != None else None, tweets_data)
 
 
 #tweets_by_lang = tweets['lang'].value_counts()
@@ -67,7 +68,24 @@ tweets['javascript'] = \
 tweets['ruby'] = \
     tweets['text'].apply(lambda tweet: word_in_text('ruby', tweet))
 
-print tweets['python'].value_counts()[True]
-print tweets['javascript'].value_counts()[True]
-print tweets['ruby'].value_counts()[True]
+tweets['programming'] = \
+    tweets['text'].apply(lambda tweet: word_in_text('programming', tweet))
 
+tweets['tutorial'] = \
+    tweets['text'].apply(lambda tweet: word_in_text('tutorial', tweet))
+
+tweets['relevant'] = \
+    tweets['text'].apply(lambda tweet: word_in_text('tutorial', tweet) or
+                                       word_in_text('programming', tweet))
+
+
+print "Python:", tweets['python'].value_counts()[True]
+print "JavaScript:", tweets['javascript'].value_counts()[True]
+print "Ruby:", tweets['ruby'].value_counts()[True]
+print "Programming:", tweets['programming'].value_counts()[True]
+print "Tutorial: ", tweets['tutorial'].value_counts()[True]
+print "Relevant:", tweets['relevant'].value_counts()[True]
+print "Relevant Python:", tweets[tweets['relevant'] == \
+    True]['python'].value_counts()[True]
+print "Relevant JavaSc:", tweets[tweets['relevant'] == \
+    True]['javascript'].value_counts()[True]
