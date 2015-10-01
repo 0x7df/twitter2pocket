@@ -7,23 +7,23 @@
 # This uses Tweepy, a Python library for accessing the Twitter API:
 # http://www.tweepy.org. Install with `pip install tweepy`.
 
+# The details of using Tweepy with the Twitter streaming API is in:
+# http://docs.tweepy.org/en/v3.4.0/streaming_how_to.html
+
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
 
+# Read the Twitter API key data from a file (not in the repository)
 with open('twitter_api_key.txt') as fileHandle:
     (access_token, access_token_secret, consumer_key, consumer_secret) = \
         [item.strip('\n') for item in fileHandle.readlines()]
 
-print access_token
-print access_token_secret
-print consumer_key
-print consumer_secret
-
+# Set the keywords to filter the Twitter stream for
 keywords = ['python', 'javascript', 'ruby']
 
 # This is a basic listener that prints received tweets to stdout
-
+# Over-ride the tweepy.Stream listener to provide methods
 class StdOutListener(StreamListener):
 
     def on_data(self, data):
@@ -32,6 +32,10 @@ class StdOutListener(StreamListener):
 
     def on_error(self, status):
         print status
+        if status == 420:
+            return False
+        return False
+        sys.exit(1)
 
 if __name__ == "__main__":
 
