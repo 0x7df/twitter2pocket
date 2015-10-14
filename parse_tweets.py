@@ -65,8 +65,14 @@ tweets['python'] = \
 tweets['javascript'] = \
     tweets['text'].apply(lambda tweet: word_in_text('javascript', tweet))
 
-tweets['ruby'] = \
-    tweets['text'].apply(lambda tweet: word_in_text('ruby', tweet))
+tweets['fortran'] = \
+    tweets['text'].apply(lambda tweet: word_in_text('fortran', tweet))
+
+tweets['bash'] = \
+    tweets['text'].apply(lambda tweet: word_in_text('bash', tweet))
+
+tweets['linux'] = \
+    tweets['text'].apply(lambda tweet: word_in_text('linux', tweet))
 
 tweets['programming'] = \
     tweets['text'].apply(lambda tweet: word_in_text('programming', tweet))
@@ -74,14 +80,17 @@ tweets['programming'] = \
 tweets['tutorial'] = \
     tweets['text'].apply(lambda tweet: word_in_text('tutorial', tweet))
 
+#tweets['relevant'] = \
+#    tweets['text'].apply(lambda tweet: word_in_text('tutorial', tweet) or
+#                                       word_in_text('programming', tweet))
+
 tweets['relevant'] = \
-    tweets['text'].apply(lambda tweet: word_in_text('tutorial', tweet) or
-                                       word_in_text('programming', tweet))
+    tweets['text'].apply(lambda tweet: word_in_text('tutorial', tweet))
 
 
 print "Python:", tweets['python'].value_counts()[True]
 print "JavaScript:", tweets['javascript'].value_counts()[True]
-print "Ruby:", tweets['ruby'].value_counts()[True]
+#print "Ruby:", tweets['ruby'].value_counts()[True]
 print "Programming:", tweets['programming'].value_counts()[True]
 print "Tutorial: ", tweets['tutorial'].value_counts()[True]
 print "Relevant:", tweets['relevant'].value_counts()[True]
@@ -89,3 +98,29 @@ print "Relevant Python:", tweets[tweets['relevant'] == \
     True]['python'].value_counts()[True]
 print "Relevant JavaSc:", tweets[tweets['relevant'] == \
     True]['javascript'].value_counts()[True]
+
+def extract_link(text):
+    regex = r'https?:..[^\s<>"]+|www\.[^\s<>"]+'
+    match = re.search(regex, text)
+    if match:
+        return match.group()
+    return ''
+
+tweets['link'] = tweets['text'].apply(lambda tweet: extract_link(tweet))
+
+tweets_relevant = tweets[tweets['relevant'] == True]
+tweets_relevant_with_link = tweets_relevant[tweets_relevant['link'] != '']
+
+print tweets_relevant_with_link[tweets_relevant_with_link['python'] == True]['link']
+print tweets_relevant_with_link[tweets_relevant_with_link['python'] == True]['text']
+
+for tweet in tweets_relevant_with_link[tweets_relevant_with_link['python'] ==
+    True]['link']:
+    print tweet
+
+
+#for tweet in tweets_relevant_with_link[tweets_relevant_with_link['python'] ==
+#    True]['text']:
+#    print tweet
+#    print
+
